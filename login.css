@@ -1,0 +1,61 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-image: url("../img/perfil_konny.png");
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+
+    background-repeat: no-repeat;
+    /* No se repite como mosaico */
+    background-size: cover;
+    /* Cubre toda la pantalla sin estirarse feo */
+    background-position: center;
+    /* Centra la imagen */
+    background-attachment: fixed;
+}
+
+.login-box h2 {
+    color: #b71c1c;
+}
+
+.login-box {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    border-top: 5px solid #d32f2f;
+    width: 300px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.login-box input {
+    width: 90%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+}
+
+.login-box button {
+    background-color: #d32f2f;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-weight: bold;
+    border-radius: 4px;
+    margin-top: 5px;
+    width: 70%;
+}
+
+.login-box button:hover {
+    background-color: #b71c1c;
+}
+
+.error-msg {
+    color: red;
+    font-size: 12px;
+    height: 15px;
+    margin-top: 10px;
+}

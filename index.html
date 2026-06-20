@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Ventas - Principal</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+
+<body>
+    <div id="app-container">
+        <header>
+            <h1>SISTEMA DE VENTAS</h1>
+            <button class="btn-salir" onclick="cerrarSesion()">Salir</button>
+        </header>
+
+        <div class="panels-container">
+            <div class="panel panel-ingreso">
+                <h3>Registro de Ingreso : </h3>
+                <div class="form-group"><label>Fecha:</label> <input type="date" id="ing-fecha"></div>
+                <div class="form-group"><label>Descripción:</label> <input type="text" id="ing-desc"></div>
+                <div class="form-group"><label>Teléfono (Opcional):</label> <input type="text" id="ing-tel"></div>
+                <div class="form-group"><label>Debe:</label> <input type="number" id="ing-debe" step="0.01" value="0">
+                </div>
+                <div class="form-group"><label>Precio:</label> <input type="number" id="ing-precio" step="0.01"></div>
+                <div class="tipo_de_pago">
+                    <label><input type="radio" name="tipo_pago" value="efectivo" checked> Efectivo</label>
+                    <label><input type="radio" name="tipo_pago" value="yape"> Yape</label>
+
+                    <button class="btn-rojo" onclick="agregarIngreso()">AGREGAR</button>
+                </div>
+            </div>
+
+            <div class="panel panel-egreso">
+                <h3>Registro de Egreso (Gasto) : </h3>
+                <div class="form-group"><label>Descripción:</label> <input type="text" id="egr-desc"></div>
+                <div class="form-group"><label>Total:</label> <input type="number" id="egr-total" step="0.01"></div>
+                <button class="btn-rojo" onclick="agregarEgreso()">AGREGAR GASTO</button>
+
+
+                <div class="acciones-finales">
+                    <div class="recuperacion">
+                        <h4>Cierre y Recuperación: Primero revise si el cuadre de caja es correcto</h4>
+                        <button class="btn-oscuro" onclick="exportarYCerrarDia()">CERRAR DÍA</button>
+                        <p>Se descargara un Reporte en pdf y Respaldo "json"</p>
+                    </div>
+
+                    <div class="recuperacion-box">
+                        <label class="recuperacion-label">Para saldar deudas de días anteriores:</label>
+                        <p class="recuperacion-instruccion">Sube el "Archivo de Respaldo".</p>
+                        <input type="file" id="import-file" accept=".json" class="input-file-resumen">
+                        <button class="btn-cargar" onclick="cargarBackup()">Cargar Respaldo al
+                            Sistema</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="contenedor_tablas">
+            <div class="table-wrapper">
+                <h4>INGRESOS - EFECTIVO</h4>
+                <table id="tabla-efectivo">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Teléfono</th>
+                            <th>Debe</th>
+                            <th>Precio</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">TOTAL EFECTIVO</th>
+                            <th id="tot-debe-efe">S/ 0.00</th>
+                            <th id="tot-efectivo">S/ 0.00</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="table-wrapper">
+                <h4>INGRESOS - YAPE</h4>
+                <table id="tabla-yape">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Teléfono</th>
+                            <th>Debe</th>
+                            <th>Precio</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th colspan="2">TOTAL YAPE</th>
+                            <th id="tot-debe-yape">S/ 0.00</th>
+                            <th id="tot-yape">S/ 0.00</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="table-wrapper">
+                <h4>EGRESOS</h4>
+                <table id="tabla-egresos">
+                    <thead>
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Total</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                    <tfoot>
+                        <tr>
+                            <th>TOTAL EGRESOS</th>
+                            <th id="tot-egreso">S/ 0.00</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+            <div class="resumenes-grid">
+                <div class="cuadre-box deudas-box">
+                    <h4>RESUMEN DE DEUDAS</h4>
+                    <table>
+                        <tr>
+                            <td>Deudas Efectivo</td>
+                            <td id="resumen-deuda-efe">S/ 0.00</td>
+                        </tr>
+                        <tr>
+                            <td>Deudas Yape</td>
+                            <td id="resumen-deuda-yape">S/ 0.00</td>
+                        </tr>
+                        <tr>
+                            <th>TOTAL DEUDAS</th>
+                            <th id="resumen-deuda-total">S/ 0.00</th>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="cuadre-box">
+                    <h4>CUADRE DE CAJA</h4>
+                    <table>
+                        <tr>
+                            <td>EFECTIVO (Pagado)</td>
+                            <td id="cuadre-efectivo">S/ 0.00</td>
+                        </tr>
+                        <tr>
+                            <td>YAPE (Pagado)</td>
+                            <td id="cuadre-yape">S/ 0.00</td>
+                        </tr>
+                        <tr>
+                            <td>EGRESO (-)</td>
+                            <td id="cuadre-egreso">S/ 0.00</td>
+                        </tr>
+                        <tr>
+                            <th>TOTAL CAJA</th>
+                            <th id="cuadre-total">S/ 0.00</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="js/app.js"></script>
+</body>
+
+</html>
